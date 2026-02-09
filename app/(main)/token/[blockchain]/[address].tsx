@@ -7,40 +7,38 @@
 
 import { AnimatedScreen } from "@/components";
 import {
-    DevTokens,
-    Markets,
-    TokenHeader,
-    TokenHolders,
-    TokenStats,
-    TokenTrades,
-    TopTraders,
-    TradeModal,
-    TraderModal,
-    TradingViewChart,
+  DevTokens,
+  Markets,
+  TokenHeader,
+  TokenHolders,
+  TokenStats,
+  TokenTrades,
+  TopTraders,
+  TradeModal,
+  TraderModal,
+  TradingViewChart,
 } from "@/components/token";
 import { TokenDetailSkeleton } from "@/components/ui/Skeleton";
 import { getBlockchainSlug, toMobulaChainId } from "@/constants/chains";
 import { useTheme } from "@/contexts/ThemeContext";
-import { useTokenDetailsStream } from "@/hooks";
-import { useTokenHolders } from "@/hooks";
-import { useTopTraders } from "@/hooks";
+import { useTokenDetailsStream, useTokenHolders, useTopTraders } from "@/hooks";
 import { TokenDetails, useTokenStore } from "@/store/tokenStore";
 import { useTopTradersStore } from "@/store/topTradersStore";
 import { Ionicons } from "@expo/vector-icons";
 import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
 import React, { useCallback, useEffect, useState } from "react";
 import {
-    Dimensions,
-    Platform,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  Dimensions,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import {
-    SafeAreaView,
-    useSafeAreaInsets,
+  SafeAreaView,
+  useSafeAreaInsets,
 } from "react-native-safe-area-context";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
@@ -184,6 +182,10 @@ export default function TokenDetailScreen() {
   // Fetch token data on mount
   useEffect(() => {
     if (!blockchain || !address) return;
+
+    // Clear previous token data immediately when switching tokens
+    // This prevents showing stale trades/holders from previous token
+    clearToken();
 
     const fetchTokenData = async () => {
       setLocalIsLoading(true);
@@ -356,10 +358,10 @@ export default function TokenDetailScreen() {
     fetchTokenData();
 
     return () => {
-      // Only clear top traders, don't clear token store to avoid issues when navigating back
+      // Clear top traders on unmount
       clearTopTraders();
     };
-  }, [blockchain, address]);
+  }, [blockchain, address, clearToken, clearTopTraders]);
 
   const handleBack = useCallback(() => {
     // Check if we can go back, otherwise go to home

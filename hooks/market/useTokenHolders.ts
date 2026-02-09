@@ -114,17 +114,19 @@ export function useTokenHolders({
     }
   }, [address, blockchain, limit, setHolders, setIsLoadingHolders]);
 
-  // Reset tracking when token changes
+  // Reset tracking and clear old holders when token changes
   useEffect(() => {
     const tokenKey = `${address}-${blockchain}`;
-    // If token changed, reset the last fetched ref
+    // If token changed, reset the last fetched ref and clear old holders
     if (
       lastFetchedTokenRef.current &&
       lastFetchedTokenRef.current !== tokenKey
     ) {
       lastFetchedTokenRef.current = null;
+      // Clear old holders immediately to prevent showing stale data
+      setHolders([]);
     }
-  }, [address, blockchain]);
+  }, [address, blockchain, setHolders]);
 
   // Fetch when enabled and token params are available
   useEffect(() => {
