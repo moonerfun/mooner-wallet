@@ -5,7 +5,7 @@ import {
   QuickActions,
   ReceiveModal,
   SendModal,
-  SwapModalV2,
+  TransactionHistoryModal,
   UnifiedHeader,
   WalletCard,
   WalletTabsSection,
@@ -240,16 +240,7 @@ export default function WalletScreen() {
   // Modal states
   const [showReceiveModal, setShowReceiveModal] = useState(false);
   const [showSendModal, setShowSendModal] = useState(false);
-  const [showSwapModal, setShowSwapModal] = useState(false);
-
-  // Handle swap modal close - reconnect streams and trigger refresh
-  const handleSwapModalClose = useCallback(() => {
-    setShowSwapModal(false);
-    // Reconnect streams in case they disconnected during swap
-    setTimeout(() => {
-      reconnectStreams();
-    }, 500);
-  }, [reconnectStreams]);
+  const [showHistoryModal, setShowHistoryModal] = useState(false);
 
   // Handle send modal close - reconnect streams after transfer
   const handleSendModalClose = useCallback(() => {
@@ -383,11 +374,11 @@ export default function WalletScreen() {
       },
     },
     {
-      id: "swap",
-      title: "Swap",
-      icon: "swap-horizontal" as const,
+      id: "history",
+      title: "History",
+      icon: "time-outline" as const,
       onPress: () => {
-        setShowSwapModal(true);
+        setShowHistoryModal(true);
       },
     },
     {
@@ -614,7 +605,10 @@ export default function WalletScreen() {
 
       <SendModal visible={showSendModal} onClose={handleSendModalClose} />
 
-      <SwapModalV2 visible={showSwapModal} onClose={handleSwapModalClose} />
+      <TransactionHistoryModal
+        visible={showHistoryModal}
+        onClose={() => setShowHistoryModal(false)}
+      />
     </SafeAreaView>
   );
 }

@@ -151,8 +151,6 @@ export const usePortfolioStore = create<PortfolioState>((set, get) => ({
         wallet,
         blockchains,
         shouldFetchPriceChange: "24h",
-        cache: "true",
-        stale: "300",
         // Fetch all chains if no specific blockchain is provided
         fetchAllChains: blockchains ? undefined : "true",
       });
@@ -254,7 +252,6 @@ export const usePortfolioStore = create<PortfolioState>((set, get) => ({
       const response = await client.fetchWalletPortfolio({
         wallets: wallets.join(","),
         shouldFetchPriceChange: "24h",
-        cache: "false",
         fetchAllChains: "true",
       });
 

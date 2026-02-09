@@ -20,6 +20,7 @@ export * from "./wallet/ReceiveModal";
 export * from "./wallet/send";
 export * from "./wallet/SendModal";
 export * from "./wallet/swap";
+export * from "./wallet/TransactionHistoryModal";
 export * from "./wallet/UnifiedBalanceCard";
 export * from "./wallet/WalletCard";
 export * from "./wallet/WalletHeader";

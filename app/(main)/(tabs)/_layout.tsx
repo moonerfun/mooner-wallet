@@ -2,7 +2,7 @@ import { triggerHaptic } from "@/components/ui/AnimatedPressable";
 import { useTheme } from "@/contexts/ThemeContext";
 import { Ionicons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
-import { Platform, Pressable } from "react-native";
+import { Platform, Pressable, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 // Custom tab bar button with haptic feedback (no scale animation)
@@ -82,6 +82,39 @@ export default function TabsLayout() {
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="pulse-outline" size={size} color={color} />
           ),
+        }}
+      />
+      <Tabs.Screen
+        name="swap"
+        options={{
+          title: "Swap",
+          tabBarIcon: ({ focused }) => (
+            <View
+              style={{
+                width: 48,
+                height: 48,
+                borderRadius: 24,
+                backgroundColor: focused
+                  ? theme.primary.DEFAULT
+                  : `${theme.primary.DEFAULT}20`,
+                alignItems: "center",
+                justifyContent: "center",
+                marginTop: 12,
+                shadowColor: theme.primary.DEFAULT,
+                shadowOffset: { width: 0, height: 4 },
+                shadowOpacity: focused ? 0.4 : 0,
+                shadowRadius: 8,
+                elevation: focused ? 8 : 0,
+              }}
+            >
+              <Ionicons
+                name="swap-horizontal"
+                size={24}
+                color={focused ? "#FFFFFF" : theme.primary.DEFAULT}
+              />
+            </View>
+          ),
+          tabBarLabel: () => null,
         }}
       />
       <Tabs.Screen

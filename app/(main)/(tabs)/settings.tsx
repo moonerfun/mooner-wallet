@@ -28,25 +28,6 @@ import {
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
 
-// Dummy data for demonstration
-const DUMMY_RECENT_TRANSACTIONS = [
-  {
-    id: "1",
-    type: "send",
-    amount: "0.05 ETH",
-    to: "0x1234...5678",
-    date: "Today",
-  },
-  {
-    id: "2",
-    type: "receive",
-    amount: "100 USDC",
-    from: "0xabcd...efgh",
-    date: "Yesterday",
-  },
-  { id: "3", type: "swap", amount: "0.1 ETH → 250 USDC", date: "2 days ago" },
-];
-
 export default function SettingsScreen() {
   const router = useRouter();
   const {
