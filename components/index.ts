@@ -11,6 +11,7 @@ export * from "./ui/SearchModal";
 export * from "./ui/Skeleton";
 export * from "./ui/TextInput";
 export * from "./ui/UnifiedHeader";
+export * from "./ui/XIcon";
 export * from "./wallet/AccountCard";
 export * from "./wallet/PortfolioAssetCard";
 export * from "./wallet/ProfileAvatar";

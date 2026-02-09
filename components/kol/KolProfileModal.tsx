@@ -3,11 +3,15 @@
  * Enhanced with Mobula analytics data
  */
 
-import { useTheme } from "@/contexts/ThemeContext";
+import { XIcon } from "@/components/ui/XIcon";
 import { getExplorerAddressUrl } from "@/constants/chains";
 import { useNotificationContext } from "@/contexts";
+import { useTheme } from "@/contexts/ThemeContext";
 import { useKolDetailsMobula } from "@/hooks";
-import type { KolLeaderboardEntry, KolRecentTrade } from "@/lib/api/supabase/supabaseTypes";
+import type {
+  KolLeaderboardEntry,
+  KolRecentTrade,
+} from "@/lib/api/supabase/supabaseTypes";
 import { useKolStore } from "@/store/kolStore";
 import {
   formatCompactNumber,
@@ -709,12 +713,12 @@ export const KolProfileModal = memo(
               style={[
                 styles.actionButton,
                 {
-                  backgroundColor: "#1DA1F2",
+                  backgroundColor: "#000",
                   borderRadius: br.md,
                 },
               ]}
             >
-              <Ionicons name="logo-twitter" size={18} color="#fff" />
+              <XIcon size={18} color="#fff" />
             </TouchableOpacity>
           )}
         </View>

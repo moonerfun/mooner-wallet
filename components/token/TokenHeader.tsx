@@ -4,6 +4,7 @@
  */
 
 import { toast } from "@/components/ui/Toast";
+import { XIcon } from "@/components/ui/XIcon";
 import { useTheme } from "@/contexts/ThemeContext";
 import { TokenDetails } from "@/store/tokenStore";
 import {
@@ -84,10 +85,14 @@ export const TokenHeader = memo(
                   { backgroundColor: theme.surface },
                 ]}
                 onPress={() =>
-                  handleOpenLink(`https://twitter.com/${token.twitter}`)
+                  handleOpenLink(
+                    token.twitter?.startsWith("http")
+                      ? token.twitter
+                      : `https://twitter.com/${token.twitter}`,
+                  )
                 }
               >
-                <Ionicons name="logo-twitter" size={16} color="#1DA1F2" />
+                <XIcon size={16} color={theme.text.primary} />
               </TouchableOpacity>
             )}
             {token.telegram && (
@@ -112,7 +117,7 @@ export const TokenHeader = memo(
                 <Ionicons
                   name="globe-outline"
                   size={16}
-                  color={theme.text.secondary}
+                  color={theme.text.primary}
                 />
               </TouchableOpacity>
             )}

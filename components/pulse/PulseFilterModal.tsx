@@ -3,6 +3,7 @@
  * Allows filtering by chain, protocols, audits, metrics, and socials
  */
 
+import { XIcon } from "@/components/ui/XIcon";
 import {
   PULSE_CHAINS,
   formatChainName,
@@ -179,16 +180,22 @@ const ToggleRow = memo(
   }) => {
     const { theme } = useTheme();
 
+    // Use XIcon for X/Twitter
+    const isXIcon = icon === "logo-x";
+
     return (
       <View style={styles.toggleRow}>
         <View style={styles.toggleLabel}>
-          {icon && (
-            <Ionicons
-              name={icon as any}
-              size={16}
-              color={theme.text.secondary}
-            />
-          )}
+          {icon &&
+            (isXIcon ? (
+              <XIcon size={16} color={theme.text.secondary} />
+            ) : (
+              <Ionicons
+                name={icon as any}
+                size={16}
+                color={theme.text.secondary}
+              />
+            ))}
           <Text style={[styles.toggleText, { color: theme.text.primary }]}>
             {label}
           </Text>
@@ -621,8 +628,8 @@ const SocialsTab = memo(
 
         <View style={styles.toggleGrid}>
           <ToggleRow
-            label="Twitter"
-            icon="logo-twitter"
+            label="X"
+            icon="logo-x"
             value={socials.twitter}
             onToggle={(v) => onUpdate("twitter", v)}
           />

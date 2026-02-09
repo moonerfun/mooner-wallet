@@ -2,6 +2,7 @@
  * TwitterLinkButton - Button component for linking/unlinking X account
  */
 
+import { XIcon } from "@/components/ui/XIcon";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useKolStore } from "@/store/kolStore";
 import { Ionicons } from "@expo/vector-icons";
@@ -31,7 +32,7 @@ export const TwitterLinkButton = memo(
         style={[
           styles.container,
           {
-            backgroundColor: isTwitterLinked ? theme.surface : "#1DA1F2",
+            backgroundColor: isTwitterLinked ? theme.surface : "#000",
             borderRadius: br.lg,
             borderWidth: isTwitterLinked ? 1 : 0,
             borderColor: theme.border,
@@ -44,12 +45,12 @@ export const TwitterLinkButton = memo(
               styles.iconContainer,
               {
                 backgroundColor: isTwitterLinked
-                  ? "#1DA1F2"
+                  ? "#000"
                   : "rgba(255,255,255,0.2)",
               },
             ]}
           >
-            <Ionicons name="logo-twitter" size={20} color="#fff" />
+            <XIcon size={20} color="#fff" />
           </View>
 
           <View style={styles.textContainer}>

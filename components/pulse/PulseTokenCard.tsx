@@ -7,6 +7,7 @@ import {
   AnimatedPressable,
   AnimatedPressablePresets,
 } from "@/components/ui/AnimatedPressable";
+import { XIcon } from "@/components/ui/XIcon";
 import { useTheme } from "@/contexts/ThemeContext";
 import { PulseToken } from "@/store/pulseStore";
 import {
@@ -72,9 +73,16 @@ const SocialButton = memo(
 
     if (!url) return null;
 
+    // Use XIcon for X/Twitter
+    const isXIcon = icon === "logo-x";
+
     return (
       <TouchableOpacity onPress={handlePress} style={styles.socialButton}>
-        <Ionicons name={icon as any} size={14} color={theme.text.secondary} />
+        {isXIcon ? (
+          <XIcon size={14} color={theme.text.secondary} />
+        ) : (
+          <Ionicons name={icon as any} size={14} color={theme.text.secondary} />
+        )}
       </TouchableOpacity>
     );
   },
@@ -265,7 +273,7 @@ export const PulseTokenCard = memo(
           {/* Socials */}
           <View style={styles.socials}>
             <SocialButton
-              icon="logo-twitter"
+              icon="logo-x"
               url={token.socials?.twitter}
               theme={theme}
             />

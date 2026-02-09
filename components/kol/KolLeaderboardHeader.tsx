@@ -2,6 +2,7 @@
  * KolLeaderboardHeader - Header with user's rank and link Twitter CTA
  */
 
+import { XIcon } from "@/components/ui/XIcon";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useKolStore } from "@/store/kolStore";
 import { Ionicons } from "@expo/vector-icons";
@@ -110,10 +111,10 @@ export const KolLeaderboardHeader = memo(
               <View
                 style={[
                   styles.twitterIconContainer,
-                  { backgroundColor: "#1DA1F2" },
+                  { backgroundColor: "#000" },
                 ]}
               >
-                <Ionicons name="logo-twitter" size={24} color="#fff" />
+                <XIcon size={24} color="#fff" />
               </View>
               <View style={styles.linkTwitterText}>
                 <Text

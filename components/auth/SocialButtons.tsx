@@ -2,6 +2,7 @@ import { useTheme } from "@/contexts/ThemeContext";
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
+import { XIcon } from "../ui/XIcon";
 
 interface SocialButtonProps {
   provider: "google" | "apple" | "discord" | "facebook" | "x";
@@ -32,7 +33,7 @@ const providerConfig = {
   },
   x: {
     name: "X",
-    icon: "logo-twitter" as const,
+    icon: null, // Uses XIcon component instead
     color: "#000000",
   },
 };
@@ -64,7 +65,11 @@ export function SocialButton({
         opacity: loading ? 0.5 : 1,
       }}
     >
-      <Ionicons name={config.icon} size={20} color={config.color} />
+      {provider === "x" ? (
+        <XIcon size={20} color={config.color} />
+      ) : (
+        <Ionicons name={config.icon!} size={20} color={config.color} />
+      )}
       <Text
         style={{
           fontSize: fs.base,
