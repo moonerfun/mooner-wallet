@@ -9,6 +9,7 @@ import { AnimatedScreen } from "@/components";
 import {
   DevTokens,
   Markets,
+  QuickBuyBar,
   TokenHeader,
   TokenHolders,
   TokenStats,
@@ -22,6 +23,7 @@ import { TokenDetailSkeleton } from "@/components/ui/Skeleton";
 import { getBlockchainSlug, toMobulaChainId } from "@/constants/chains";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useTokenDetailsStream, useTokenHolders, useTopTraders } from "@/hooks";
+import { useSettingsStore } from "@/store/settingsStore";
 import { TokenDetails, useTokenStore } from "@/store/tokenStore";
 import { useTopTradersStore } from "@/store/topTradersStore";
 import { Ionicons } from "@expo/vector-icons";
@@ -102,6 +104,9 @@ export default function TokenDetailScreen() {
   // Trade modal state
   const [showTradeModal, setShowTradeModal] = useState(false);
   const [tradeMode, setTradeMode] = useState<TradeMode>("buy");
+
+  // Quick buy enabled setting
+  const quickBuyEnabled = useSettingsStore((s) => s.quickBuyEnabled);
 
   // Use LOCAL state for token data to prevent issues when navigating between token screens
   const [localToken, setLocalToken] = useState<TokenDetails | null>(null);
@@ -453,6 +458,9 @@ export default function TokenDetailScreen() {
             />
           </View>
 
+          {/* Quick Buy Bar - inline below chart */}
+          {quickBuyEnabled && localToken && <QuickBuyBar token={localToken} />}
+
           {/* Tab Bar */}
           <View style={styles.tabBarContainer}>
             <ScrollView
@@ -645,7 +653,7 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   tabBarContainer: {
-    marginTop: 16,
+    marginTop: 12,
   },
   tabBarScrollContent: {
     paddingHorizontal: 16,

@@ -421,6 +421,66 @@ export default function SettingsScreen() {
           </Card>
         </TouchableOpacity>
 
+        {/* Quick Buy Settings */}
+        <TouchableOpacity
+          onPress={() => router.push("/(main)/quick-buy-settings" as any)}
+        >
+          <Card>
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  gap: sp[3],
+                }}
+              >
+                <View
+                  style={{
+                    width: 40,
+                    height: 40,
+                    borderRadius: br.lg,
+                    backgroundColor: theme.surface,
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Ionicons name="flash" size={20} color={theme.warning} />
+                </View>
+                <View>
+                  <Text
+                    style={{
+                      fontSize: fs.base,
+                      fontWeight: "500",
+                      color: theme.text.primary,
+                    }}
+                  >
+                    Quick Buy
+                  </Text>
+                  <Text
+                    style={{
+                      fontSize: fs.sm,
+                      color: theme.text.muted,
+                    }}
+                  >
+                    Instant buy presets without confirmation
+                  </Text>
+                </View>
+              </View>
+              <Ionicons
+                name="chevron-forward"
+                size={20}
+                color={theme.text.secondary}
+              />
+            </View>
+          </Card>
+        </TouchableOpacity>
+
         {/* KOL Leaderboard Section */}
         <Card>
           <View style={{ gap: sp[3] }}>

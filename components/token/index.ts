@@ -4,6 +4,7 @@
 
 export { DevTokens } from "./DevTokens";
 export { Markets } from "./Markets";
+export { QuickBuyBar } from "./QuickBuyBar";
 export { TokenHeader } from "./TokenHeader";
 export { TokenHolders } from "./TokenHolders";
 export { TokenStats } from "./TokenStats";

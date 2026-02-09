@@ -59,6 +59,10 @@ interface TradeModalProps {
   onClose: () => void;
   token: TokenDetails | null;
   initialMode?: TradeMode;
+  /** Quick buy amount in USD - when set, auto-executes without confirmation */
+  quickBuyAmount?: number;
+  /** Callback when quick buy execution completes */
+  onQuickBuyComplete?: (success: boolean, error?: string) => void;
 }
 
 // Map blockchain name to chain ID (include all aliases)
@@ -164,9 +168,14 @@ export function TradeModal({
   onClose,
   token,
   initialMode = "buy",
+  quickBuyAmount,
+  onQuickBuyComplete,
 }: TradeModalProps) {
   const { theme } = useTheme();
   const { consolidatedWallets, selectedWallet } = useWallet();
+
+  // Quick buy mode detection
+  const isQuickBuyMode = quickBuyAmount !== undefined && quickBuyAmount > 0;
 
   // Memoize only the token fields we care about to prevent excessive re-renders
   // when the parent updates other token fields (like price from WebSocket)
@@ -413,6 +422,66 @@ export function TradeModal({
     }
   }, [visible, initialMode]);
 
+  // Track if we've already triggered quick buy execution
+  const quickBuyTriggeredRef = React.useRef(false);
+
+  // Quick buy mode: pre-fill amount when modal opens
+  useEffect(() => {
+    if (visible && isQuickBuyMode) {
+      setMode("buy");
+      setAmount(quickBuyAmount.toString());
+      quickBuyTriggeredRef.current = false; // Reset trigger flag
+      console.log("[TradeModal] Quick buy mode activated:", quickBuyAmount);
+    }
+  }, [visible, isQuickBuyMode, quickBuyAmount]);
+
+  // Quick buy mode: auto-execute when quote is ready (no confirmation needed)
+  useEffect(() => {
+    if (
+      !visible ||
+      !isQuickBuyMode ||
+      quickBuyTriggeredRef.current ||
+      isQuoteLoading ||
+      !quote ||
+      quoteError ||
+      isExecuting ||
+      isSwapping ||
+      !fromToken ||
+      !toToken ||
+      !walletAccount
+    ) {
+      return;
+    }
+
+    // Mark as triggered to prevent double execution
+    quickBuyTriggeredRef.current = true;
+    console.log("[TradeModal] Quick buy auto-executing swap...");
+
+    // Auto-execute the swap
+    handleConfirmSwap().then((/* result handled in handleConfirmSwap */) => {
+      // Callback is handled inside handleConfirmSwap
+    });
+  }, [
+    visible,
+    isQuickBuyMode,
+    quote,
+    isQuoteLoading,
+    quoteError,
+    isExecuting,
+    isSwapping,
+    fromToken,
+    toToken,
+    walletAccount,
+    handleConfirmSwap,
+  ]);
+
+  // Reset quick buy trigger when modal closes
+  useEffect(() => {
+    if (!visible) {
+      quickBuyTriggeredRef.current = false;
+    }
+  }, [visible]);
+
   // Track if we've fetched balances for this modal session
   const hasFetchedRef = React.useRef(false);
 
@@ -653,6 +722,12 @@ export function TradeModal({
         const action = mode === "buy" ? "Bought" : "Sold";
         setAmount("");
         setShowConfirmation(false);
+
+        // Call quick buy complete callback if in quick buy mode
+        if (isQuickBuyMode && onQuickBuyComplete) {
+          onQuickBuyComplete(true);
+        }
+
         handleClose();
         // Show toast after modal closes
         setTimeout(() => {
@@ -662,6 +737,11 @@ export function TradeModal({
           );
         }, 300);
       } else {
+        // Call quick buy complete callback with error
+        if (isQuickBuyMode && onQuickBuyComplete) {
+          onQuickBuyComplete(false, result.error || "Trade failed");
+        }
+
         // Close modal first, then show error toast
         handleClose();
         setTimeout(() => {
@@ -670,12 +750,17 @@ export function TradeModal({
       }
     } catch (error) {
       console.error("Trade error:", error);
+      const errorMessage =
+        error instanceof Error ? error.message : "Unknown error";
+
+      // Call quick buy complete callback with error
+      if (isQuickBuyMode && onQuickBuyComplete) {
+        onQuickBuyComplete(false, errorMessage);
+      }
+
       handleClose();
       setTimeout(() => {
-        toast.error(
-          "Trade Failed",
-          error instanceof Error ? error.message : "Unknown error",
-        );
+        toast.error("Trade Failed", errorMessage);
       }, 300);
     } finally {
       setIsSwapping(false);
@@ -690,6 +775,8 @@ export function TradeModal({
     handleClose,
     triggerPortfolioRefresh,
     currentUser?.id,
+    isQuickBuyMode,
+    onQuickBuyComplete,
   ]);
 
   // Check if ready to trade

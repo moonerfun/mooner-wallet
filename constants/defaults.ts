@@ -106,6 +106,16 @@ export const PRIORITY_FEES = {
 export type PriorityFeeLevel = keyof typeof PRIORITY_FEES;
 
 // =============================================================================
+// Quick Buy Defaults
+// =============================================================================
+
+/** Default quick buy preset amounts (USD) */
+export const DEFAULT_QUICK_BUY_AMOUNTS = [10, 50, 100, 500];
+
+/** Default selected quick buy amount (USD) */
+export const DEFAULT_QUICK_BUY_AMOUNT = 50;
+
+// =============================================================================
 // Retry Defaults
 // =============================================================================
 

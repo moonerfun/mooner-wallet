@@ -7,6 +7,8 @@ import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
 import {
+  DEFAULT_QUICK_BUY_AMOUNT,
+  DEFAULT_QUICK_BUY_AMOUNTS,
   DEFAULT_SLIPPAGE,
   SMALL_BALANCE_THRESHOLD,
 } from "@/constants/defaults";
@@ -67,6 +69,11 @@ export interface SettingsState {
   pulseAutoRefresh: boolean;
   pulseMaxTokens: number;
 
+  // Quick Buy settings (Axiom-style instant trading)
+  quickBuyEnabled: boolean;
+  quickBuyAmounts: number[]; // Preset USD amounts [10, 50, 100, 500]
+  quickBuyDefaultAmount: number; // Default highlighted amount
+
   // Actions
   setNotificationsEnabled: (enabled: boolean) => void;
   setSelectedWalletId: (walletId: string | null) => void;
@@ -81,6 +88,9 @@ export interface SettingsState {
   setHideBalances: (hide: boolean) => void;
   setPulseAutoRefresh: (autoRefresh: boolean) => void;
   setPulseMaxTokens: (max: number) => void;
+  setQuickBuyEnabled: (enabled: boolean) => void;
+  setQuickBuyAmounts: (amounts: number[]) => void;
+  setQuickBuyDefaultAmount: (amount: number) => void;
   resetSettings: () => void;
 }
 
@@ -99,6 +109,9 @@ const DEFAULT_SETTINGS = {
   hideBalances: false,
   pulseAutoRefresh: true,
   pulseMaxTokens: MAX_PULSE_TOKENS,
+  quickBuyEnabled: true,
+  quickBuyAmounts: DEFAULT_QUICK_BUY_AMOUNTS,
+  quickBuyDefaultAmount: DEFAULT_QUICK_BUY_AMOUNT,
 };
 
 export const useSettingsStore = create<SettingsState>()(
@@ -137,6 +150,13 @@ export const useSettingsStore = create<SettingsState>()(
 
       setPulseMaxTokens: (max) => set({ pulseMaxTokens: max }),
 
+      setQuickBuyEnabled: (enabled) => set({ quickBuyEnabled: enabled }),
+
+      setQuickBuyAmounts: (amounts) => set({ quickBuyAmounts: amounts }),
+
+      setQuickBuyDefaultAmount: (amount) =>
+        set({ quickBuyDefaultAmount: amount }),
+
       resetSettings: () => set({ ...DEFAULT_SETTINGS, _hasHydrated: true }),
     }),
     {
@@ -161,6 +181,9 @@ export const useSettingsStore = create<SettingsState>()(
         hideBalances: state.hideBalances,
         pulseAutoRefresh: state.pulseAutoRefresh,
         pulseMaxTokens: state.pulseMaxTokens,
+        quickBuyEnabled: state.quickBuyEnabled,
+        quickBuyAmounts: state.quickBuyAmounts,
+        quickBuyDefaultAmount: state.quickBuyDefaultAmount,
       }),
     },
   ),
